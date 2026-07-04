@@ -1,65 +1,99 @@
 @import "tailwindcss";
 
+/* ==============================
+   CUSTOM COLOR PALETTE
+   Deep Emerald Green: #006B3C
+   Navy Blue: #0A1F2E
+   ============================== */
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-slate-950: #020617;
-  --color-slate-900: #0f172a;
-  --color-slate-800: #1e293b;
-  --color-slate-700: #334155;
-  --color-slate-600: #475569;
-  --color-slate-500: #64748b;
-  --color-slate-400: #94a3b8;
-  --color-slate-300: #cbd5e1;
-  --color-slate-200: #e2e8f0;
-  --color-slate-100: #f1f5f9;
-  --color-green-950: #052e16;
-  --color-green-900: #14532d;
-  --color-green-800: #166534;
-  --color-green-700: #15803d;
-  --color-green-600: #16a34a;
-  --color-green-500: #22c55e;
-  --color-green-400: #4ade80;
-  --color-green-300: #86efac;
-  --color-green-200: #bbf7d0;
-  --color-green-100: #dcfce7;
-  --color-cyan-950: #083344;
-  --color-cyan-900: #164e63;
-  --color-cyan-800: #155e75;
-  --color-cyan-400: #22d3ee;
-  --color-cyan-300: #67e8f9;
-  --color-emerald-950: #022c22;
-  --color-emerald-900: #064e3b;
-  --color-emerald-800: #065f46;
-  --color-emerald-400: #34d399;
-  --color-purple-950: #1e0528;
-  --color-purple-900: #3b0764;
-  --color-purple-800: #581c87;
-  --color-purple-400: #c084fc;
-  --color-yellow-950: #1a1200;
-  --color-yellow-900: #422006;
-  --color-yellow-600: #ca8a04;
-  --color-yellow-500: #eab308;
-  --color-yellow-400: #facc15;
-  --color-red-950: #1a0005;
-  --color-red-900: #3b0a0a;
-  --color-red-400: #f87171;
+
+  /* Dark mode base */
+  --color-dark-bg: #060f17;
+  --color-dark-surface: #0c1a26;
+  --color-dark-border: #132a3a;
+  --color-dark-elevated: #142e40;
+  --color-dark-text: #e2e8f0;
+  --color-dark-muted: #8899aa;
+
+  /* Light mode base */
+  --color-light-bg: #f0f4f8;
+  --color-light-surface: #ffffff;
+  --color-light-border: #d0dbe8;
+  --color-light-elevated: #e8eef5;
+  --color-light-text: #0a1f2e;
+  --color-light-muted: #5a6e80;
+
+  /* Deep Emerald Green (#006B3C) scale */
+  --color-emerald-50: #e6f5ed;
+  --color-emerald-100: #b3dfc9;
+  --color-emerald-200: #80c9a5;
+  --color-emerald-300: #4db381;
+  --color-emerald-400: #269d63;
+  --color-emerald-500: #006B3C;
+  --color-emerald-600: #005a32;
+  --color-emerald-700: #004928;
+  --color-emerald-800: #00381e;
+  --color-emerald-900: #002714;
+  --color-emerald-950: #00160a;
+
+  /* Navy Blue (#0A1F2E) scale */
+  --color-navy-50: #e6eaf0;
+  --color-navy-100: #b3bfd0;
+  --color-navy-200: #8095b0;
+  --color-navy-300: #4d6b90;
+  --color-navy-400: #26476f;
+  --color-navy-500: #0A1F2E;
+  --color-navy-600: #091a27;
+  --color-navy-700: #071520;
+  --color-navy-800: #051019;
+  --color-navy-900: #030a12;
+  --color-navy-950: #010509;
+
+  /* Accent / Success greens */
+  --color-green-400: #34d399;
+  --color-green-500: #10b981;
+
+  /* Status indicators */
+  --color-status-success: var(--color-emerald-500);
+  --color-status-warning: #f59e0b;
+  --color-status-error: #ef4444;
 }
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks as expected. See https://github.com/tailwindlabs/tailwindcss/issues/15243
-*/
+/* Base layer — light mode defaults */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-slate-800, currentColor);
+  :root {
+    --bg-primary: var(--color-light-bg);
+    --bg-surface: var(--color-light-surface);
+    --bg-elevated: var(--color-light-elevated);
+    --border-color: var(--color-light-border);
+    --text-primary: var(--color-light-text);
+    --text-muted: var(--color-light-muted);
+    --accent: var(--color-emerald-500);
+    --accent-light: var(--color-emerald-400);
+    --accent-dark: var(--color-emerald-700);
+    --navy: var(--color-navy-500);
+  }
+
+  .dark {
+    --bg-primary: var(--color-dark-bg);
+    --bg-surface: var(--color-dark-surface);
+    --bg-elevated: var(--color-dark-elevated);
+    --border-color: var(--color-dark-border);
+    --text-primary: var(--color-dark-text);
+    --text-muted: var(--color-dark-muted);
+    --accent: var(--color-emerald-500);
+    --accent-light: var(--color-emerald-400);
+    --accent-dark: var(--color-emerald-700);
+    --navy: var(--color-navy-500);
+  }
+
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    border-color: var(--border-color);
   }
 }
 
@@ -73,9 +107,7 @@ html {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -83,27 +115,27 @@ html {
   }
 }
 
-/* Custom scrollbar for terminal aesthetic */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-slate-950);
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-slate-800);
+  background: var(--border-color);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-slate-700);
+  background: var(--text-muted);
 }
 
-/* Selection color */
+/* Selection */
 ::selection {
-  background-color: rgba(74, 222, 128, 0.2);
-  color: #e2e8f0;
+  background-color: var(--accent);
+  color: white;
 }

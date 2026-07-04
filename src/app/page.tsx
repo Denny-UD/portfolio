@@ -26,7 +26,7 @@ import { useTheme } from "@/hooks/useTheme"
 
 export default function Home() {
   const { booted, currentStep, bootText, visible, skip } = useBootSequence()
-  const { theme, setTheme, toggleTheme } = useTheme()
+  const { theme, toggleTheme } = useTheme()
   const [activeSection, setActiveSection] = useState("dashboard")
   const [commandOpen, setCommandOpen] = useState(false)
 
@@ -38,21 +38,12 @@ export default function Home() {
     }
   }, [])
 
-  // Track scroll for active section
   useEffect(() => {
     if (!booted) return
     const handleScroll = () => {
       const sections = [
-        "dashboard",
-        "about",
-        "stack",
-        "experience",
-        "projects",
-        "architecture",
-        "certifications",
-        "blog",
-        "resume",
-        "contact",
+        "dashboard", "about", "stack", "experience", "projects",
+        "architecture", "certifications", "blog", "resume", "contact",
       ]
       for (const id of sections.reverse()) {
         const el = document.getElementById(id)
@@ -69,7 +60,6 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [booted])
 
-  // Keyboard shortcuts
   useEffect(() => {
     if (!booted) return
     const handleKey = (e: KeyboardEvent) => {
@@ -82,7 +72,6 @@ export default function Home() {
     return () => window.removeEventListener("keydown", handleKey)
   }, [booted])
 
-  // Boot keyboard escape
   useEffect(() => {
     if (visible) {
       const handleKey = (e: KeyboardEvent) => {
@@ -122,19 +111,34 @@ export default function Home() {
         onNavigate={scrollToSection}
       />
 
-      <main className="md:pl-56 min-h-screen">
+      <main className="md:pl-56 min-h-screen" style={{ backgroundColor: "var(--bg-primary)" }}>
         {/* Top status bar */}
-        <div className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm px-4 md:px-8 py-2">
+        <div
+          className="sticky top-0 z-30 flex items-center justify-between border-b px-4 md:px-8 py-2 backdrop-blur-sm"
+          style={{
+            backgroundColor: "color-mix(in srgb, var(--bg-surface) 80%, transparent)",
+            borderColor: "var(--border-color)",
+          }}
+        >
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" aria-hidden="true" />
-            <span className="font-mono text-[10px] text-green-400">umangdakh@cloud-ops:~$</span>
-            <span className="font-mono text-[10px] text-slate-600 hidden sm:inline">
+            <span className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: "var(--accent)" }} aria-hidden="true" />
+            <span className="font-mono text-[10px]" style={{ color: "var(--accent)" }}>
+              umangdakh@cloud-ops:~$
+            </span>
+            <span className="font-mono text-[10px] hidden sm:inline" style={{ color: "var(--text-muted)" }}>
               {activeSection}
             </span>
           </div>
           <button
             onClick={() => setCommandOpen(true)}
-            className="flex items-center gap-1 rounded border border-slate-800 bg-slate-900 px-2.5 py-1 font-mono text-[10px] text-slate-600 transition-colors hover:border-slate-700 hover:text-slate-400"
+            className="flex items-center gap-1 rounded border px-2.5 py-1 font-mono text-[10px] transition-colors"
+            style={{
+              borderColor: "var(--border-color)",
+              backgroundColor: "var(--bg-elevated)",
+              color: "var(--text-muted)",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--accent)" }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border-color)" }}
             aria-label="Open command palette"
           >
             <kbd className="text-[11px]">⌘K</kbd>
@@ -155,12 +159,11 @@ export default function Home() {
           <Resume />
           <Contact />
 
-          {/* Footer */}
-          <footer className="border-t border-slate-800 pt-6 pb-8 text-center">
-            <p className="font-mono text-[10px] text-slate-700">
-              <span className="text-green-500/60">$</span> Built with Next.js 15 · TypeScript · Tailwind CSS · Framer Motion · ShadCN UI
+          <footer className="border-t pt-6 pb-8 text-center" style={{ borderColor: "var(--border-color)" }}>
+            <p className="font-mono text-[10px]" style={{ color: "var(--text-muted)", opacity: 0.5 }}>
+              <span style={{ color: "var(--accent)", opacity: 0.6 }}>$</span> Built with Next.js 15 · TypeScript · Tailwind CSS · Framer Motion
             </p>
-            <p className="font-mono text-[10px] text-slate-800 mt-1">
+            <p className="font-mono text-[10px] mt-1" style={{ color: "var(--text-muted)", opacity: 0.3 }}>
               © {new Date().getFullYear()} Umang Dakh · Cloud Ops Control Center
             </p>
           </footer>

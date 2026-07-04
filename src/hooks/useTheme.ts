@@ -11,8 +11,10 @@ export function useTheme() {
     const stored = localStorage.getItem("theme") as Theme | null
     if (stored) {
       setThemeState(stored)
-      document.documentElement.classList.toggle("dark", stored === "dark")
+      document.documentElement.classList.remove("dark", "light")
+      document.documentElement.classList.add(stored)
     } else {
+      // Default to dark
       document.documentElement.classList.add("dark")
     }
   }, [])
@@ -20,7 +22,8 @@ export function useTheme() {
   const setTheme = (t: Theme) => {
     setThemeState(t)
     localStorage.setItem("theme", t)
-    document.documentElement.classList.toggle("dark", t === "dark")
+    document.documentElement.classList.remove("dark", "light")
+    document.documentElement.classList.add(t)
   }
 
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark")

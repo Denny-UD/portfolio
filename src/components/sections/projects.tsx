@@ -3,17 +3,34 @@
 import { motion } from "framer-motion"
 import { Code, ExternalLink, CheckCircle, AlertTriangle, Archive } from "lucide-react"
 import { projects } from "@/data/mock-data"
-import { cn } from "@/lib/utils"
 import { useState } from "react"
 
 export function Projects() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "production": return "var(--accent-light)"
+      case "maintenance": return "#f59e0b"
+      case "archived": return "var(--text-muted)"
+      default: return "var(--text-muted)"
+    }
+  }
+
+  const getStatusStyle = (status: string) => ({
+    color: getStatusColor(status),
+    backgroundColor: status === "production"
+      ? "rgba(0, 107, 60, 0.15)"
+      : status === "maintenance"
+        ? "rgba(245, 158, 11, 0.1)"
+        : "var(--bg-elevated)",
+  })
+
   return (
     <section id="projects" className="space-y-6">
-      <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
-        <Code className="h-5 w-5 text-green-400" aria-hidden="true" />
-        <h2 className="font-mono text-lg font-semibold text-slate-200">
+      <div className="flex items-center gap-3 border-b pb-3" style={{ borderColor: "var(--border-color)" }}>
+        <Code className="h-5 w-5" style={{ color: "var(--accent)" }} aria-hidden="true" />
+        <h2 className="font-mono text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
           Projects / Deployments
         </h2>
       </div>
@@ -25,22 +42,21 @@ export function Projects() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="rounded-lg border border-slate-800 bg-slate-900/50 overflow-hidden"
+            className="rounded-lg border overflow-hidden"
+            style={{ backgroundColor: "var(--bg-surface)", borderColor: "var(--border-color)" }}
           >
             <button
               onClick={() => setExpandedId(expandedId === project.id ? null : project.id)}
-              className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-slate-800/30"
+              className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors"
+              style={{}}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--bg-elevated)" }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent" }}
               aria-expanded={expandedId === project.id}
               aria-controls={`project-${project.id}`}
             >
-              {/* Status indicator */}
               <div
-                className={cn(
-                  "flex h-8 w-8 items-center justify-center rounded-full",
-                  project.status === "production" && "bg-green-950/40 text-green-400",
-                  project.status === "maintenance" && "bg-yellow-950/40 text-yellow-400",
-                  project.status === "archived" && "bg-slate-800 text-slate-500"
-                )}
+                className="flex h-8 w-8 items-center justify-center rounded-full"
+                style={getStatusStyle(project.status)}
               >
                 {project.status === "production" && <CheckCircle className="h-4 w-4" />}
                 {project.status === "maintenance" && <AlertTriangle className="h-4 w-4" />}
@@ -48,20 +64,21 @@ export function Projects() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <h3 className="font-mono text-sm font-semibold text-slate-200 truncate">
+                <h3 className="font-mono text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>
                   {project.name}
                 </h3>
                 <div className="flex flex-wrap gap-1.5 mt-1">
                   {project.technologies.slice(0, 4).map((tech) => (
                     <span
                       key={tech}
-                      className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-[9px] text-slate-500"
+                      className="rounded px-1.5 py-0.5 font-mono text-[9px]"
+                      style={{ backgroundColor: "var(--bg-elevated)", color: "var(--text-muted)" }}
                     >
                       {tech}
                     </span>
                   ))}
                   {project.technologies.length > 4 && (
-                    <span className="font-mono text-[9px] text-slate-600">
+                    <span className="font-mono text-[9px]" style={{ color: "var(--text-muted)" }}>
                       +{project.technologies.length - 4}
                     </span>
                   )}
@@ -69,15 +86,15 @@ export function Projects() {
               </div>
 
               <ExternalLink
-                className={cn(
-                  "h-4 w-4 text-slate-600 transition-transform",
-                  expandedId === project.id && "rotate-45"
-                )}
+                className="h-4 w-4 transition-transform"
+                style={{
+                  color: "var(--text-muted)",
+                  transform: expandedId === project.id ? "rotate(45deg)" : "rotate(0deg)",
+                }}
                 aria-hidden="true"
               />
             </button>
 
-            {/* Expanded content */}
             {expandedId === project.id && (
               <motion.div
                 id={`project-${project.id}`}
@@ -85,35 +102,35 @@ export function Projects() {
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="border-t border-slate-800 px-5 py-4 space-y-4"
+                className="border-t px-5 py-4 space-y-4"
+                style={{ borderColor: "var(--border-color)" }}
               >
+                {[
+                  { label: "Problem", color: "#ef4444", content: project.problem },
+                  { label: "Solution", color: "#22d3ee", content: project.solution },
+                  { label: "Impact", color: "var(--accent-light)", content: project.impact },
+                ].map(({ label, color, content }) => (
+                  <div key={label}>
+                    <h4 className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider" style={{ color }}>
+                      {label}
+                    </h4>
+                    <p className="font-mono text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>{content}</p>
+                  </div>
+                ))}
                 <div>
-                  <h4 className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-red-400">
-                    Problem
-                  </h4>
-                  <p className="font-mono text-xs leading-relaxed text-slate-400">{project.problem}</p>
-                </div>
-                <div>
-                  <h4 className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-cyan-400">
-                    Solution
-                  </h4>
-                  <p className="font-mono text-xs leading-relaxed text-slate-400">{project.solution}</p>
-                </div>
-                <div>
-                  <h4 className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-green-400">
-                    Impact
-                  </h4>
-                  <p className="font-mono text-xs leading-relaxed text-slate-400">{project.impact}</p>
-                </div>
-                <div>
-                  <h4 className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                  <h4 className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
                     Technologies
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-md border border-slate-700 bg-slate-800/50 px-2 py-1 font-mono text-[10px] text-slate-400"
+                        className="rounded-md border px-2 py-1 font-mono text-[10px]"
+                        style={{
+                          borderColor: "var(--border-color)",
+                          backgroundColor: "var(--bg-elevated)",
+                          color: "var(--text-muted)",
+                        }}
                       >
                         {tech}
                       </span>
@@ -121,16 +138,20 @@ export function Projects() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                  <h4 className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
                     Key Metrics
                   </h4>
                   <div className="grid gap-1.5 sm:grid-cols-2">
                     {project.metrics.map((m) => (
                       <div
                         key={m}
-                        className="rounded border border-slate-800 bg-slate-950/50 px-3 py-2"
+                        className="rounded border px-3 py-2"
+                        style={{
+                          borderColor: "var(--border-color)",
+                          backgroundColor: "var(--bg-primary)",
+                        }}
                       >
-                        <p className="font-mono text-[11px] text-slate-500">{m}</p>
+                        <p className="font-mono text-[11px]" style={{ color: "var(--text-muted)" }}>{m}</p>
                       </div>
                     ))}
                   </div>

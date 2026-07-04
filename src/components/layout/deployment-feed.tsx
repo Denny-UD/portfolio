@@ -1,12 +1,5 @@
 "use client"
 
-/**
- * Deployment Feed Component
- * Simulated live deployment log feed — entirely client-side.
- * Uses mock data with random timing to simulate "live" activity.
- * No real deployments are being tracked.
- */
-
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Terminal, CheckCircle, Clock, XCircle } from "lucide-react"
@@ -31,30 +24,33 @@ const statusMessages = [
   "docker pull nginx:1.25",
 ]
 
+const typeColors: Record<string, string> = {
+  deploy: "#22d3ee",
+  info: "#64748b",
+  success: "#34d399",
+  error: "#ef4444",
+}
+
 export function DeploymentFeed() {
   const [entries, setEntries] = useState<FeedEntry[]>([])
   const [paused, setPaused] = useState(false)
 
   useEffect(() => {
-    // Add initial entries from mock data
     const initial: FeedEntry[] = deploymentLogs.slice(0, 3).map((log, i) => ({
       id: `init-${i}`,
       message: `${log.service} — ${log.action} [${log.duration}]`,
-      type: log.status === "success" ? "deploy" : "info",
+      type: log.status === "success" ? "deploy" : "info" as FeedEntry["type"],
       timestamp: new Date(log.timestamp).toLocaleTimeString(),
     }))
     setEntries(initial)
 
-    // Simulate live feed
     const interval = setInterval(() => {
       if (paused) return
       const types: FeedEntry["type"][] = ["deploy", "info", "success", "error"]
-      const log = deploymentLogs[Math.floor(Math.random() * deploymentLogs.length)]
       const msg = statusMessages[Math.floor(Math.random() * statusMessages.length)]
-
       const entry: FeedEntry = {
         id: Math.random().toString(36).slice(2),
-        message: paused ? "Feed paused" : msg,
+        message: msg,
         type: types[Math.floor(Math.random() * types.length)],
         timestamp: new Date().toLocaleTimeString(),
       }
@@ -65,15 +61,27 @@ export function DeploymentFeed() {
   }, [paused])
 
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-950/50 font-mono">
-      <div className="flex items-center justify-between border-b border-slate-800 px-4 py-2">
-        <div className="flex items-center gap-2 text-xs text-slate-500">
+    <div
+      className="rounded-lg border font-mono"
+      style={{
+        backgroundColor: "var(--bg-surface)",
+        borderColor: "var(--border-color)",
+      }}
+    >
+      <div
+        className="flex items-center justify-between border-b px-4 py-2"
+        style={{ borderColor: "var(--border-color)" }}
+      >
+        <div className="flex items-center gap-2 text-xs" style={{ color: "var(--text-muted)" }}>
           <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
           <span>deployment-logs (mock)</span>
         </div>
         <button
           onClick={() => setPaused(!paused)}
-          className="rounded px-2 py-0.5 text-[10px] text-slate-600 hover:text-slate-400 transition-colors"
+          className="rounded px-2 py-0.5 text-[10px] transition-colors"
+          style={{ color: "var(--text-muted)" }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)" }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)" }}
           aria-label={paused ? "Resume live feed" : "Pause live feed"}
         >
           {paused ? "▶ Resume" : "❚❚ Pause"}
@@ -91,22 +99,16 @@ export function DeploymentFeed() {
               transition={{ duration: 0.2 }}
               className="flex items-start gap-2 px-2 py-1 text-[11px]"
             >
-              <span className="shrink-0 text-slate-600">[{entry.timestamp}]</span>
-              <span
-                className={cn(
-                  "shrink-0",
-                  entry.type === "deploy" && "text-cyan-400",
-                  entry.type === "info" && "text-slate-400",
-                  entry.type === "success" && "text-green-400",
-                  entry.type === "error" && "text-red-400"
-                )}
-              >
-                {entry.type === "deploy" && <CheckCircle className="inline h-3 w-3" aria-hidden="true" />}
-                {entry.type === "info" && <Clock className="inline h-3 w-3" aria-hidden="true" />}
-                {entry.type === "success" && <CheckCircle className="inline h-3 w-3" aria-hidden="true" />}
-                {entry.type === "error" && <XCircle className="inline h-3 w-3" aria-hidden="true" />}
+              <span className="shrink-0" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
+                [{entry.timestamp}]
               </span>
-              <span className="text-slate-400 truncate">{entry.message}</span>
+              <span className="shrink-0" style={{ color: typeColors[entry.type] }}>
+                {entry.type === "error" && <XCircle className="inline h-3 w-3" />}
+                {entry.type !== "error" && <CheckCircle className="inline h-3 w-3" />}
+              </span>
+              <span className="truncate" style={{ color: "var(--text-muted)" }}>
+                {entry.message}
+              </span>
             </motion.div>
           ))}
         </AnimatePresence>

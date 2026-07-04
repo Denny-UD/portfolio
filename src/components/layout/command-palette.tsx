@@ -81,7 +81,8 @@ export function CommandPalette({ open, onOpenChange, onNavigate }: CommandPalett
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[90] flex items-start justify-center pt-[15vh] bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[90] flex items-start justify-center pt-[15vh] backdrop-blur-sm"
+          style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
           onClick={() => onOpenChange(false)}
           role="dialog"
           aria-modal="true"
@@ -92,12 +93,18 @@ export function CommandPalette({ open, onOpenChange, onNavigate }: CommandPalett
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ duration: 0.15 }}
-            className="w-full max-w-lg rounded-lg border border-slate-700 bg-slate-900 shadow-2xl overflow-hidden"
+            className="w-full max-w-lg rounded-lg border shadow-2xl overflow-hidden"
+            style={{
+              backgroundColor: "var(--bg-surface)",
+              borderColor: "var(--border-color)",
+            }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Search input */}
-            <div className="flex items-center gap-3 border-b border-slate-700 px-4 py-3">
-              <Search className="h-4 w-4 text-slate-500" aria-hidden="true" />
+            <div
+              className="flex items-center gap-3 border-b px-4 py-3"
+              style={{ borderColor: "var(--border-color)" }}
+            >
+              <Search className="h-4 w-4" style={{ color: "var(--text-muted)" }} aria-hidden="true" />
               <input
                 ref={inputRef}
                 type="text"
@@ -105,18 +112,25 @@ export function CommandPalette({ open, onOpenChange, onNavigate }: CommandPalett
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="flex-1 bg-transparent font-mono text-sm text-slate-200 placeholder-slate-600 outline-none"
+                className="flex-1 bg-transparent font-mono text-sm outline-none"
+                style={{ color: "var(--text-primary)" }}
                 aria-label="Search sections"
               />
-              <kbd className="hidden rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 font-mono text-xs text-slate-500 sm:inline-block">
+              <kbd
+                className="hidden rounded border px-1.5 py-0.5 font-mono text-xs sm:inline-block"
+                style={{
+                  borderColor: "var(--border-color)",
+                  backgroundColor: "var(--bg-elevated)",
+                  color: "var(--text-muted)",
+                }}
+              >
                 <Command className="inline h-3 w-3" aria-hidden="true" />K
               </kbd>
             </div>
 
-            {/* Results */}
             <div className="max-h-72 overflow-y-auto p-2" role="listbox">
               {filtered.length === 0 ? (
-                <div className="px-3 py-8 text-center font-mono text-sm text-slate-600">
+                <div className="px-3 py-8 text-center font-mono text-sm" style={{ color: "var(--text-muted)" }}>
                   No results found
                 </div>
               ) : (
@@ -127,16 +141,17 @@ export function CommandPalette({ open, onOpenChange, onNavigate }: CommandPalett
                     onMouseEnter={() => setSelectedIndex(i)}
                     role="option"
                     aria-selected={i === selectedIndex}
-                    className={cn(
-                      "flex w-full items-center gap-3 rounded-md px-3 py-2.5 font-mono text-sm transition-colors",
-                      i === selectedIndex
-                        ? "bg-green-900/30 text-green-400"
-                        : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
-                    )}
+                    className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 font-mono text-sm transition-colors"
+                    style={{
+                      backgroundColor: i === selectedIndex ? "rgba(0, 107, 60, 0.2)" : "transparent",
+                      color: i === selectedIndex ? "var(--accent-light)" : "var(--text-muted)",
+                    }}
                   >
                     <span className="text-base">{getIcon(item.icon)}</span>
                     <span>{item.label}</span>
-                    <span className="ml-auto text-xs text-slate-600">{item.section}</span>
+                    <span className="ml-auto text-xs" style={{ color: "var(--text-muted)", opacity: 0.5 }}>
+                      {item.section}
+                    </span>
                   </button>
                 ))
               )}

@@ -1,12 +1,5 @@
 "use client"
 
-/**
- * Boot Screen Component
- * Simulated cloud platform boot sequence — entirely client-side animation.
- * No real infrastructure is being initialized.
- * Respects prefers-reduced-motion and is skippable.
- */
-
 import { motion, AnimatePresence } from "framer-motion"
 import { Terminal, SkipForward } from "lucide-react"
 
@@ -32,21 +25,20 @@ export function BootScreen({ bootText, currentStep, visible, onSkip }: BootScree
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-950"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
+          style={{ backgroundColor: "var(--color-dark-bg)" }}
           role="status"
           aria-label="System booting"
         >
           <div className="flex flex-col items-center gap-8">
-            {/* Animated terminal icon */}
             <motion.div
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
             >
-              <Terminal className="h-12 w-12 text-green-400" aria-hidden="true" />
+              <Terminal className="h-12 w-12" style={{ color: "var(--accent)" }} aria-hidden="true" />
             </motion.div>
 
-            {/* Boot text */}
-            <div className="font-mono text-sm text-green-400/80">
+            <div className="font-mono text-sm" style={{ color: "var(--accent)" }}>
               {bootStages.map((stage, i) => (
                 <motion.div
                   key={stage}
@@ -59,23 +51,26 @@ export function BootScreen({ bootText, currentStep, visible, onSkip }: BootScree
                   className="flex items-center gap-2 py-1"
                 >
                   <span
-                    className={`inline-block h-2 w-2 rounded-full ${
-                      i < currentStep
-                        ? "bg-green-500"
-                        : i === currentStep
-                          ? "bg-green-400 animate-pulse"
-                          : "bg-slate-700"
-                    }`}
+                    className="inline-block h-2 w-2 rounded-full"
+                    style={{
+                      backgroundColor:
+                        i < currentStep
+                          ? "var(--accent)"
+                          : i === currentStep
+                            ? "var(--accent-light)"
+                            : "var(--border-color)",
+                    }}
                     aria-hidden="true"
                   />
                   <span
-                    className={
-                      i < currentStep
-                        ? "text-green-400"
-                        : i === currentStep
-                          ? "text-green-300"
-                          : "text-slate-600"
-                    }
+                    style={{
+                      color:
+                        i < currentStep
+                          ? "var(--accent)"
+                          : i === currentStep
+                            ? "var(--accent-light)"
+                            : "var(--text-muted)",
+                    }}
                   >
                     {stage}
                   </span>
@@ -83,10 +78,21 @@ export function BootScreen({ bootText, currentStep, visible, onSkip }: BootScree
               ))}
             </div>
 
-            {/* Skip button */}
             <button
               onClick={onSkip}
-              className="mt-4 flex items-center gap-2 rounded border border-slate-700 px-4 py-2 font-mono text-xs text-slate-500 transition-colors hover:border-slate-600 hover:text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+              className="mt-4 flex items-center gap-2 rounded border px-4 py-2 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2"
+              style={{
+                borderColor: "var(--border-color)",
+                color: "var(--text-muted)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--accent-dark)";
+                e.currentTarget.style.color = "var(--text-primary)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--border-color)";
+                e.currentTarget.style.color = "var(--text-muted)";
+              }}
               aria-label="Skip boot sequence"
             >
               <SkipForward className="h-3 w-3" aria-hidden="true" />

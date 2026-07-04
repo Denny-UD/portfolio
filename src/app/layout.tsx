@@ -56,7 +56,6 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  // JSON-LD structured data is injected via the page component
 }
 
 export default function RootLayout({
@@ -67,7 +66,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        {/* JSON-LD structured data for person/engineer */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -95,7 +93,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-slate-950 font-sans text-slate-100 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans antialiased`}
       >
         {children}
         <SpeedInsights />

@@ -64,15 +64,21 @@ export function CommandCenter({ activeSection, onNavigate, theme, onToggleTheme 
       aria-label="Command center navigation"
     >
       {/* Logo */}
-      <div className="mb-4 flex items-center gap-2 border-b border-slate-800 px-3 pb-4 pt-3 dark:border-slate-800">
-        <div className="flex h-8 w-8 items-center justify-center rounded bg-green-500/20 text-xs font-bold text-green-400">
+      <div
+        className="mb-4 flex items-center gap-2 border-b px-3 pb-4 pt-3"
+        style={{ borderColor: "var(--border-color)" }}
+      >
+        <div
+          className="flex h-8 w-8 items-center justify-center rounded text-xs font-bold text-white"
+          style={{ backgroundColor: "var(--accent)" }}
+        >
           UD
         </div>
         <div className="flex flex-col">
-          <span className="font-mono text-xs font-semibold text-slate-200 dark:text-slate-200">
+          <span className="font-mono text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
             Cloud Ops
           </span>
-          <span className="font-mono text-[10px] text-slate-500">Control Center</span>
+          <span className="font-mono text-[10px]" style={{ color: "var(--text-muted)" }}>Control Center</span>
         </div>
       </div>
 
@@ -81,25 +87,50 @@ export function CommandCenter({ activeSection, onNavigate, theme, onToggleTheme 
         <button
           key={item.id}
           onClick={() => handleNav(item.section)}
-          className={cn(
-            "flex items-center gap-3 rounded-md px-3 py-2.5 font-mono text-xs transition-all",
-            activeSection === item.section
-              ? "bg-green-900/30 text-green-400 before:absolute before:left-0 before:h-6 before:w-0.5 before:rounded-full before:bg-green-400"
-              : "text-slate-500 hover:bg-slate-800/50 hover:text-slate-300",
-            "relative"
-          )}
+          className="flex items-center gap-3 rounded-md px-3 py-2.5 font-mono text-xs transition-all relative"
+          style={{
+            backgroundColor: activeSection === item.section ? "rgba(0, 107, 60, 0.2)" : "transparent",
+            color: activeSection === item.section ? "var(--accent-light)" : "var(--text-muted)",
+          }}
+          onMouseEnter={(e) => {
+            if (activeSection !== item.section) {
+              e.currentTarget.style.backgroundColor = "var(--bg-elevated)"
+              e.currentTarget.style.color = "var(--text-primary)"
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (activeSection !== item.section) {
+              e.currentTarget.style.backgroundColor = "transparent"
+              e.currentTarget.style.color = "var(--text-muted)"
+            }
+          }}
           aria-current={activeSection === item.section ? "page" : undefined}
         >
+          {activeSection === item.section && (
+            <span
+              className="absolute left-0 h-6 w-0.5 rounded-full"
+              style={{ backgroundColor: "var(--accent)" }}
+            />
+          )}
           <span className="shrink-0">{iconMap[item.icon]}</span>
           <span className="truncate">{item.label}</span>
         </button>
       ))}
 
       {/* Theme toggle at bottom */}
-      <div className="mt-auto border-t border-slate-800 pt-2 dark:border-slate-800">
+      <div className="mt-auto border-t pt-2" style={{ borderColor: "var(--border-color)" }}>
         <button
           onClick={onToggleTheme}
-          className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 font-mono text-xs text-slate-500 transition-all hover:bg-slate-800/50 hover:text-slate-300"
+          className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 font-mono text-xs transition-all"
+          style={{ color: "var(--text-muted)" }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--bg-elevated)"
+            e.currentTarget.style.color = "var(--text-primary)"
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent"
+            e.currentTarget.style.color = "var(--text-muted)"
+          }}
           aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
         >
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -113,10 +144,11 @@ export function CommandCenter({ activeSection, onNavigate, theme, onToggleTheme 
     <>
       {/* Desktop sidebar */}
       <aside
-        className={cn(
-          "fixed left-0 top-0 z-40 hidden h-full w-56 border-r border-slate-800 bg-slate-950 p-2 dark:border-slate-800 dark:bg-slate-950 md:block",
-          "light:border-slate-200 light:bg-white"
-        )}
+        className="fixed left-0 top-0 z-40 hidden h-full w-56 border-r p-2 md:block"
+        style={{
+          backgroundColor: "var(--bg-surface)",
+          borderColor: "var(--border-color)",
+        }}
       >
         {sidebarContent}
       </aside>
@@ -124,10 +156,14 @@ export function CommandCenter({ activeSection, onNavigate, theme, onToggleTheme 
       {/* Mobile trigger */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900 shadow-lg md:hidden"
+        className="fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full border shadow-lg md:hidden"
+        style={{
+          backgroundColor: "var(--bg-surface)",
+          borderColor: "var(--border-color)",
+        }}
         aria-label="Open navigation menu"
       >
-        <Menu className="h-5 w-5 text-slate-300" />
+        <Menu className="h-5 w-5" style={{ color: "var(--text-primary)" }} />
       </button>
 
       {/* Mobile drawer */}
@@ -138,7 +174,8 @@ export function CommandCenter({ activeSection, onNavigate, theme, onToggleTheme 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/60 md:hidden"
+              className="fixed inset-0 z-50 md:hidden"
+              style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
               onClick={() => setMobileOpen(false)}
             />
             <motion.aside
@@ -146,12 +183,17 @@ export function CommandCenter({ activeSection, onNavigate, theme, onToggleTheme 
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed left-0 top-0 z-50 h-full w-64 border-r border-slate-800 bg-slate-950 p-2 md:hidden"
+              className="fixed left-0 top-0 z-50 h-full w-64 border-r p-2 md:hidden"
+              style={{
+                backgroundColor: "var(--bg-surface)",
+                borderColor: "var(--border-color)",
+              }}
             >
               <div className="flex justify-end p-2">
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-md p-1 text-slate-500 hover:text-slate-300"
+                  className="rounded-md p-1"
+                  style={{ color: "var(--text-muted)" }}
                   aria-label="Close navigation menu"
                 >
                   <X className="h-5 w-5" />

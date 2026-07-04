@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Network, ArrowRight } from "lucide-react"
+import { Network } from "lucide-react"
 import { architectureDiagrams } from "@/data/mock-data"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
@@ -21,14 +21,13 @@ export function Architecture() {
 
   return (
     <section id="architecture" className="space-y-6">
-      <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
-        <Network className="h-5 w-5 text-green-400" aria-hidden="true" />
-        <h2 className="font-mono text-lg font-semibold text-slate-200">
+      <div className="flex items-center gap-3 border-b pb-3" style={{ borderColor: "var(--border-color)" }}>
+        <Network className="h-5 w-5" style={{ color: "var(--accent)" }} aria-hidden="true" />
+        <h2 className="font-mono text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
           Architecture Gallery
         </h2>
       </div>
 
-      {/* Diagram selector */}
       <div className="flex gap-2" role="tablist" aria-label="Architecture diagrams">
         {architectureDiagrams.map((d, i) => (
           <button
@@ -36,29 +35,28 @@ export function Architecture() {
             onClick={() => setActiveDiagram(i)}
             role="tab"
             aria-selected={activeDiagram === i}
-            className={cn(
-              "rounded-md px-4 py-2 font-mono text-xs transition-all",
-              activeDiagram === i
-                ? "bg-green-900/40 text-green-400 border border-green-700/50"
-                : "bg-slate-900 text-slate-500 border border-slate-800 hover:border-slate-700"
-            )}
+            className="rounded-md px-4 py-2 font-mono text-xs border transition-all"
+            style={{
+              backgroundColor: activeDiagram === i ? "rgba(0, 107, 60, 0.2)" : "var(--bg-surface)",
+              color: activeDiagram === i ? "var(--accent-light)" : "var(--text-muted)",
+              borderColor: activeDiagram === i ? "var(--accent)" : "var(--border-color)",
+            }}
           >
             {d.title}
           </button>
         ))}
       </div>
 
-      {/* Interactive diagram */}
       <motion.div
         key={diagram.id}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative overflow-hidden rounded-lg border border-slate-800 bg-slate-900/50 p-6"
+        className="relative overflow-hidden rounded-lg border p-6"
+        style={{ backgroundColor: "var(--bg-surface)", borderColor: "var(--border-color)" }}
         role="tabpanel"
         aria-label={diagram.title}
       >
         <div className="relative h-[400px] w-full">
-          {/* Connection lines */}
           <svg className="absolute inset-0 h-full w-full" aria-hidden="true">
             {diagram.edges.map((edge, i) => {
               const from = diagram.nodes.find((n) => n.id === edge.from)
@@ -77,7 +75,7 @@ export function Architecture() {
                     y1={`${y1}%`}
                     x2={`${x2}%`}
                     y2={`${y2}%`}
-                    stroke="rgb(71, 85, 105)"
+                    stroke="var(--border-color)"
                     strokeWidth="1.5"
                     strokeDasharray="4 4"
                     initial={{ pathLength: 0 }}
@@ -88,7 +86,7 @@ export function Architecture() {
                     <text
                       x={`${(x1 + x2) / 2}%`}
                       y={`${(y1 + y2) / 2 - 2}%`}
-                      fill="rgb(100, 116, 139)"
+                      fill="var(--text-muted)"
                       fontSize="8"
                       textAnchor="middle"
                       fontFamily="monospace"
@@ -101,7 +99,6 @@ export function Architecture() {
             })}
           </svg>
 
-          {/* Nodes */}
           {diagram.nodes.map((node, i) => (
             <motion.div
               key={node.id}
@@ -110,7 +107,7 @@ export function Architecture() {
               transition={{ delay: i * 0.05, duration: 0.3 }}
               className={cn(
                 "absolute flex items-center justify-center rounded-lg border px-3 py-2 text-center font-mono text-[10px] leading-tight transition-all hover:scale-110 hover:z-10 cursor-default",
-                typeColors[node.type] || "border-slate-700 bg-slate-800 text-slate-400"
+                typeColors[node.type] || ""
               )}
               style={{
                 left: `${node.x}%`,
@@ -125,12 +122,11 @@ export function Architecture() {
           ))}
         </div>
 
-        {/* Legend */}
-        <div className="mt-4 flex flex-wrap gap-3 border-t border-slate-800 pt-3">
+        <div className="mt-4 flex flex-wrap gap-3 border-t pt-3" style={{ borderColor: "var(--border-color)" }}>
           {Object.entries(typeColors).map(([type, color]) => (
             <div key={type} className="flex items-center gap-1.5">
               <div className={cn("h-2.5 w-2.5 rounded-sm border", color.split(" ")[0])} />
-              <span className="font-mono text-[10px] text-slate-500 capitalize">{type}</span>
+              <span className="font-mono text-[10px]" style={{ color: "var(--text-muted)" }}>{type}</span>
             </div>
           ))}
         </div>
