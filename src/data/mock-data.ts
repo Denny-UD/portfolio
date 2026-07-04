@@ -346,7 +346,7 @@ export const blogPosts: BlogEntry[] = [
 // ===== CONTACT INFO =====
 export const contactInfo: ContactInfo[] = [
   { platform: "LinkedIn", handle: "umang-dakh", url: "https://linkedin.com/in/umang-dakh", icon: "linkedin" },
-  { platform: "GitHub", handle: "umangdakh", url: "https://github.com/umangdakh", icon: "github" },
+  { platform: "GitHub", handle: "Denny-UD", url: "https://github.com/Denny-UD", icon: "github" },
   { platform: "Email", handle: "umangdakh@gmail.com", url: "mailto:umangdakh@gmail.com", icon: "mail" },
 ]
 
