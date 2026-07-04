@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -78,7 +79,7 @@ export default function RootLayout({
               url: "https://umangdakh.vercel.app",
               sameAs: [
                 "https://linkedin.com/in/umang-dakh",
-                "https://github.com/umangdakh",
+                "https://github.com/Denny-UD",
               ],
               knowsAbout: [
                 "Amazon Web Services",
@@ -97,6 +98,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-slate-950 font-sans text-slate-100 antialiased`}
       >
         {children}
+        <SpeedInsights />
       </body>
     </html>
   )

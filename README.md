@@ -113,18 +113,18 @@ vercel --prod
 
 1. **Set up custom domain** (optional): Go to Vercel project → Domains → add your domain
 2. **Update metadata**: Edit `src/app/layout.tsx` to update the URL to your actual domain
-3. **Add resume PDF**: Replace `public/resume.pdf` with your actual ATS-optimized resume
-4. **Update GitHub link**: The resume download links point to `https://raw.githubusercontent.com/umangdakh/portfolio/main/public/resume.pdf` — update if your repo name differs
+3. **Add resume PDF**: Place your actual ATS-optimized resume as `public/Umang_Dakh_Resume.pdf`
+4. **Update GitHub link**: The resume download links point to `https://raw.githubusercontent.com/umangdakh/portfolio/main/public/Umang_Dakh_Resume.pdf` — update if your repo name differs
 
 ## Resume PDF
 
 The resume download button points to:
 ```
-https://raw.githubusercontent.com/umangdakh/portfolio/main/public/resume.pdf
+https://raw.githubusercontent.com/umangdakh/portfolio/main/public/Umang_Dakh_Resume.pdf
 ```
 
 To make this work:
-1. Upload your actual `Umang_Dakh_Resume.pdf` (from the attached file) as `public/resume.pdf` in the repo
+1. Upload your actual `Umang_Dakh_Resume.pdf` (from the attached file) as `public/Umang_Dakh_Resume.pdf` in the repo
 2. Push to GitHub — the raw URL will be live automatically
 
 ## Customization

@@ -33,7 +33,7 @@ export function Resume() {
 
         <div className="flex flex-wrap gap-3">
           <a
-            href="https://raw.githubusercontent.com/umangdakh/portfolio/main/public/resume.pdf"
+            href="https://raw.githubusercontent.com/umangdakh/portfolio/main/public/Umang_Dakh_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -43,7 +43,7 @@ export function Resume() {
             </Button>
           </a>
           <a
-            href="https://raw.githubusercontent.com/umangdakh/portfolio/main/public/resume.pdf"
+            href="https://raw.githubusercontent.com/umangdakh/portfolio/main/public/Umang_Dakh_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -55,7 +55,7 @@ export function Resume() {
         </div>
 
         <p className="font-mono text-[10px] text-slate-700">
-          Resume is served from GitHub. Ensure the file exists at public/resume.pdf in the repository.
+          Resume is served from GitHub. Ensure the file exists at public/Umang_Dakh_Resume.pdf in the repository.
         </p>
       </motion.div>
     </section>
